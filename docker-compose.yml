@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  postgress-core:
+    container_name: postgress-core
+    image: "postgres:13.4"
+    restart: always
+    hostname: postgress-core
+    volumes:
+      - postgress-core:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=shop
+    networks:
+      - nw
+  core-api:
+    container_name: core-api
+    build:
+      context: core/
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgress-core
+    environment:
+      - DB_URL=jdbc:postgresql://postgress-core:5432/shop
+      - DB_USERNAME=admin
+      - DB_PASSWORD=secret
+      - SERVER_PORT=8080
+    networks:
+      - nw
+networks:
+  nw:
+    driver: bridge
+volumes:
+  postgress-core:
