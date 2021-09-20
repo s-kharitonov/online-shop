@@ -84,13 +84,12 @@ public class Currency {
 
     @Override
     public String toString() {
-        return "Currency{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", multiplier=" + multiplier +
-                ", creationDate=" + creationDate +
-                ", lastUpdateDate=" + lastUpdateDate +
-                ", version=" + version +
-                '}';
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "code = " + code + ", " +
+                "multiplier = " + multiplier + ", " +
+                "creationDate = " + creationDate + ", " +
+                "lastUpdateDate = " + lastUpdateDate + ", " +
+                "version = " + version + ")";
     }
 }
