@@ -1,0 +1,82 @@
+package com.core.model;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(schema = "shop", name = "languages")
+public class Language {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "languages_s")
+    @SequenceGenerator(name = "languages_s", schema = "shop", sequenceName = "languages_id_seq", allocationSize = 1)
+    private Long id;
+
+    @Column(name = "code", nullable = false, length = 3)
+    private String code;
+
+    @CreationTimestamp
+    @Column(name = "creation_date", nullable = false, updatable = false)
+    private LocalDateTime creationDate;
+
+    @UpdateTimestamp
+    @Column(name = "last_update_date", nullable = false)
+    private LocalDateTime lastUpdateDate;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private int version;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "code = " + code + ", " +
+                "creationDate = " + creationDate + ", " +
+                "lastUpdateDate = " + lastUpdateDate + ", " +
+                "version = " + version + ")";
+    }
+}

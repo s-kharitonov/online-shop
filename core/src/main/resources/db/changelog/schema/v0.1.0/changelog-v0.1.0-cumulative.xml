@@ -5,4 +5,5 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
     <include relativeToChangelogFile="true" file="2021-08-21-01-init-schema.xml"/>
     <include relativeToChangelogFile="true" file="2021-08-21-02-currencies.xml"/>
+    <include relativeToChangelogFile="true" file="2021-09-16-03-languages.xml"/>
 </databaseChangeLog>
