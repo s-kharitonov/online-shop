@@ -4,23 +4,19 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "shop", name = "currencies")
-public class Currency {
+@Table(schema = "shop", name = "languages")
+public class Language {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencies_s")
-    @SequenceGenerator(name = "currencies_s", schema = "shop", sequenceName = "currencies_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "languages_s")
+    @SequenceGenerator(name = "languages_s", schema = "shop", sequenceName = "languages_id_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "code", nullable = false, unique = true, length = 3)
+    @Column(name = "code", nullable = false, length = 3)
     private String code;
-
-    @Column(name = "multiplier", nullable = false)
-    private BigDecimal multiplier;
 
     @CreationTimestamp
     @Column(name = "creation_date", nullable = false, updatable = false)
@@ -48,14 +44,6 @@ public class Currency {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public BigDecimal getMultiplier() {
-        return multiplier;
-    }
-
-    public void setMultiplier(BigDecimal multiplier) {
-        this.multiplier = multiplier;
     }
 
     public LocalDateTime getCreationDate() {
@@ -87,7 +75,6 @@ public class Currency {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "code = " + code + ", " +
-                "multiplier = " + multiplier + ", " +
                 "creationDate = " + creationDate + ", " +
                 "lastUpdateDate = " + lastUpdateDate + ", " +
                 "version = " + version + ")";

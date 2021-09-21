@@ -14,8 +14,6 @@ import java.util.Optional;
 @Service
 public class CurrenciesServiceImpl implements CurrenciesService {
 
-    private static final String NOT_FOUND_CURRENCY_BY_ID_MESSAGE_TEMPLATE = "currency with id: %s not found";
-
     private final CurrenciesRepository repository;
 
     public CurrenciesServiceImpl(CurrenciesRepository repository) {
@@ -48,8 +46,7 @@ public class CurrenciesServiceImpl implements CurrenciesService {
     public CurrencyResponseDto update(long id, CurrencyRequestDto requestDto) {
         throwErrorIfExistByCode(requestDto.code());
         var currency = repository.findById(id)
-                .orElseThrow(() -> new NotFoundResourceException(
-                        String.format(NOT_FOUND_CURRENCY_BY_ID_MESSAGE_TEMPLATE, id)));
+                .orElseThrow(() -> new NotFoundResourceException(String.format("currency with id: %s not found", id)));
 
         currency.setCode(requestDto.code());
         currency.setMultiplier(requestDto.multiplier());
@@ -63,8 +60,7 @@ public class CurrenciesServiceImpl implements CurrenciesService {
     @Transactional
     public void deleteById(long id) {
         var currency = repository.findById(id)
-                .orElseThrow(() -> new NotFoundResourceException(String.format(
-                        NOT_FOUND_CURRENCY_BY_ID_MESSAGE_TEMPLATE, id)));
+                .orElseThrow(() -> new NotFoundResourceException(String.format("currency with id: %s not found", id)));
 
         repository.delete(currency);
     }
