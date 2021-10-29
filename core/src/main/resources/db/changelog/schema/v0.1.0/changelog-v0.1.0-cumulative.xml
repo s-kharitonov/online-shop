@@ -6,4 +6,7 @@
     <include relativeToChangelogFile="true" file="2021-08-21-01-init-schema.xml"/>
     <include relativeToChangelogFile="true" file="2021-08-21-02-currencies.xml"/>
     <include relativeToChangelogFile="true" file="2021-09-16-03-languages.xml"/>
+    <include relativeToChangelogFile="true" file="2021-09-16-04-products.xml"/>
+    <include relativeToChangelogFile="true" file="2021-09-16-05-product-descriptions.xml"/>
+    <include relativeToChangelogFile="true" file="2021-09-16-06-product-features.xml"/>
 </databaseChangeLog>
