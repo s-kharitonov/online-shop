@@ -4,6 +4,7 @@ import com.core.model.Language;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 import static com.core.constants.ContainerConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +41,7 @@ class LanguagesRepositoryUnitTest {
     private static final String EN_CODE = "EN";
 
     @TestConfiguration
-    static class CurrenciesRepositoryUnitTestConfig {
+    static class LanguagesRepositoryUnitTestConfig {
 
         @Bean
         public DataSource dataSource() {
@@ -82,5 +84,21 @@ class LanguagesRepositoryUnitTest {
     @DisplayName("should check on exist language by code")
     void shouldCheckOnExistLanguageByCode(String code) {
         assertTrue(repository.existsByCode(code));
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    @DisplayName("should return languages by code in")
+    void shouldReturnLanguagesByCodeIn() {
+        List<String> languageCodes = List.of(RU_CODE, EN_CODE);
+        List<Language> expectedLanguages = em.getEntityManager()
+                .createQuery("select l from Language l where l.code in :codes", Language.class)
+                .setParameter("codes", languageCodes)
+                .getResultList();
+        List<Language> languages = repository.findAllByCodeIn(languageCodes)
+                .toList();
+
+        assertThat(languages).isNotEmpty()
+                .containsExactlyElementsOf(expectedLanguages);
     }
 }
