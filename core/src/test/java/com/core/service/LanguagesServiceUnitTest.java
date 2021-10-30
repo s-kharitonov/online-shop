@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InOrder;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -30,6 +31,7 @@ class LanguagesServiceUnitTest {
     private static final String EN_CODE = "EN";
     private static final String DE_CODE = "DE";
     private static final long FIRST_LANGUAGE_ID = 1L;
+    private static final long SECOND_LANGUAGE_ID = 2L;
 
     private LanguagesRepository repository;
     private LanguagesService service;
@@ -49,13 +51,13 @@ class LanguagesServiceUnitTest {
         var savedLanguage = new Language();
 
         savedLanguage.setId(FIRST_LANGUAGE_ID);
-        savedLanguage.setCode(RU_CODE);
+        savedLanguage.setCode(requestDto.code());
 
         when(repository.save(any())).thenReturn(savedLanguage);
 
         var expectedLanguage = new LanguageResponseDto.Builder()
                 .id(FIRST_LANGUAGE_ID)
-                .code(RU_CODE)
+                .code(requestDto.code())
                 .build();
 
         assertThat(service.create(requestDto))
@@ -109,6 +111,34 @@ class LanguagesServiceUnitTest {
                 .isEqualTo(expectedLanguage);
         inOrder.verify(repository, times(1))
                 .findByCode(code);
+    }
+
+    @Test
+    @DisplayName("should return languages by code in")
+    void shouldReturnLanguagesByCodeIn() {
+        var firstLanguage = new Language();
+
+        firstLanguage.setId(FIRST_LANGUAGE_ID);
+        firstLanguage.setCode(RU_CODE);
+
+        var secondLanguage = new Language();
+
+        secondLanguage.setId(SECOND_LANGUAGE_ID);
+        secondLanguage.setCode(EN_CODE);
+
+        List<String> languageCodes = List.of(RU_CODE, EN_CODE);
+        List<Language> foundedLanguages = List.of(firstLanguage, secondLanguage);
+        List<LanguageResponseDto> expectedLanguages = foundedLanguages.stream()
+                .map(language -> new LanguageResponseDto(language.getId(), language.getCode()))
+                .toList();
+
+        when(repository.findAllByCodeIn(languageCodes)).thenReturn(foundedLanguages.stream());
+
+        assertThat(service.getAllByCodeIn(languageCodes)).isNotEmpty()
+                .containsExactlyElementsOf(expectedLanguages);
+
+        inOrder.verify(repository, times(1))
+                .findAllByCodeIn(languageCodes);
     }
 
     @ParameterizedTest

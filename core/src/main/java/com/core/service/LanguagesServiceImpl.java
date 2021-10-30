@@ -9,6 +9,8 @@ import com.core.repository.LanguagesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,6 +40,14 @@ public class LanguagesServiceImpl implements LanguagesService {
     public Optional<LanguageResponseDto> getByCode(String code) {
         return repository.findByCode(code)
                 .map(this::convertLanguageToDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LanguageResponseDto> getAllByCodeIn(Collection<String> codes) {
+        return repository.findAllByCodeIn(codes)
+                .map(this::convertLanguageToDto)
+                .toList();
     }
 
     @Override
