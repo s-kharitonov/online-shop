@@ -209,24 +209,19 @@ class LanguagesServiceUnitTest {
     @Test
     @DisplayName("should delete language without errors")
     void shouldDeleteLanguageWithoutErrors() {
-        var foundedLanguage = new Language();
-
-        foundedLanguage.setId(FIRST_LANGUAGE_ID);
-        foundedLanguage.setCode(RU_CODE);
-
-        when(repository.findById(FIRST_LANGUAGE_ID)).thenReturn(Optional.of(foundedLanguage));
+        when(repository.existsById(FIRST_LANGUAGE_ID)).thenReturn(true);
 
         assertDoesNotThrow(() -> service.deleteById(FIRST_LANGUAGE_ID));
         inOrder.verify(repository, times(1))
-                .findById(FIRST_LANGUAGE_ID);
+                .existsById(FIRST_LANGUAGE_ID);
         inOrder.verify(repository, times(1))
-                .delete(foundedLanguage);
+                .deleteById(FIRST_LANGUAGE_ID);
     }
 
     @Test
     @DisplayName("should throw NotFoundResourceException when language for delete not found")
     void shouldThrowNotFoundResourceExceptionWhenLanguageForDeleteNotFound() {
-        when(repository.findById(FIRST_LANGUAGE_ID)).thenReturn(Optional.empty());
+        when(repository.existsById(FIRST_LANGUAGE_ID)).thenReturn(false);
         assertThrows(NotFoundResourceException.class, () -> service.deleteById(FIRST_LANGUAGE_ID));
     }
 

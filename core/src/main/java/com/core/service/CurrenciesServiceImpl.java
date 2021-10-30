@@ -59,10 +59,13 @@ public class CurrenciesServiceImpl implements CurrenciesService {
     @Override
     @Transactional
     public void deleteById(long id) {
-        var currency = repository.findById(id)
-                .orElseThrow(() -> new NotFoundResourceException(String.format("currency with id: %s not found", id)));
+        var hasCurrency = repository.existsById(id);
 
-        repository.delete(currency);
+        if (!hasCurrency) {
+            throw new NotFoundResourceException(String.format("currency with id: %s not found", id));
+        }
+
+        repository.deleteById(id);
     }
 
     private void throwErrorIfExistByCode(String code) {

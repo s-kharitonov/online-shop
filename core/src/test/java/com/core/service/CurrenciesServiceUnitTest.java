@@ -197,25 +197,20 @@ class CurrenciesServiceUnitTest {
     @Test
     @DisplayName("should delete currency without errors")
     void shouldDeleteCurrencyWithoutErrors() {
-        var foundedCurrency = new Currency();
-
-        foundedCurrency.setId(FIRST_CURRENCY_ID);
-        foundedCurrency.setCode(RUB_CODE);
-        foundedCurrency.setMultiplier(BigDecimal.ONE);
-
-        when(repository.findById(FIRST_CURRENCY_ID)).thenReturn(Optional.of(foundedCurrency));
+        when(repository.existsById(FIRST_CURRENCY_ID)).thenReturn(true);
 
         assertDoesNotThrow(() -> service.deleteById(FIRST_CURRENCY_ID));
 
         inOrder.verify(repository, times(1))
-                .delete(any());
+                .existsById(FIRST_CURRENCY_ID);
+        inOrder.verify(repository, times(1))
+                .deleteById(FIRST_CURRENCY_ID);
     }
 
     @Test
     @DisplayName("should throw NotFoundResourceException when currency for delete not found")
     void shouldThrowNotFoundResourceExceptionWhenCurrencyForDeleteNotFound() {
-        when(repository.findById(FIRST_CURRENCY_ID)).thenReturn(Optional.empty());
-
+        when(repository.existsById(FIRST_CURRENCY_ID)).thenReturn(false);
         assertThrows(NotFoundResourceException.class, () -> service.deleteById(FIRST_CURRENCY_ID));
     }
 

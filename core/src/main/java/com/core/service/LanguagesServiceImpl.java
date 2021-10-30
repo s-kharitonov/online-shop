@@ -67,10 +67,13 @@ public class LanguagesServiceImpl implements LanguagesService {
     @Override
     @Transactional
     public void deleteById(long id) {
-        var language = repository.findById(id)
-                .orElseThrow(() -> new NotFoundResourceException(String.format("language with id: %s not found", id)));
+        var hasLanguage = repository.existsById(id);
 
-        repository.delete(language);
+        if (!hasLanguage) {
+            throw new NotFoundResourceException(String.format("language with id: %s not found", id));
+        }
+
+        repository.deleteById(id);
     }
 
     private void throwErrorIfExistByCode(String code) {
