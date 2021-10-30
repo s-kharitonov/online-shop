@@ -333,14 +333,12 @@ class ProductsServiceUnitTest {
 
         List<ProductDescriptionRequestDto> macDescriptions = List.of(ruMacDescription, enMacDescription);
 
-        var ruMacScreenFeature =
-                new ProductFeatureRequestDto(FIRST_FEATURE_ID, RU_LANGUAGE_CODE, RU_SCREEN_FEATURE_NAME,
-                        MAC_SCREEN_FEATURE_VALUE);
+        var ruMacScreenFeature = new ProductFeatureRequestDto(FIRST_FEATURE_ID, RU_LANGUAGE_CODE,
+                RU_SCREEN_FEATURE_NAME, MAC_SCREEN_FEATURE_VALUE);
         var ruMacCpuFeature = new ProductFeatureRequestDto(SECOND_FEATURE_ID, RU_LANGUAGE_CODE, RU_CPU_FEATURE_NAME,
                 MAC_CPU_FEATURE_VALUE);
-        var enMacScreenFeature =
-                new ProductFeatureRequestDto(THIRD_FEATURE_ID, EN_LANGUAGE_CODE, EN_SCREEN_FEATURE_NAME,
-                        MAC_SCREEN_FEATURE_VALUE);
+        var enMacScreenFeature = new ProductFeatureRequestDto(THIRD_FEATURE_ID, EN_LANGUAGE_CODE,
+                EN_SCREEN_FEATURE_NAME, MAC_SCREEN_FEATURE_VALUE);
         var enMacCpuFeature = new ProductFeatureRequestDto(FOURTH_FEATURE_ID, EN_LANGUAGE_CODE, EN_CPU_FEATURE_NAME,
                 MAC_CPU_FEATURE_VALUE);
 
@@ -355,14 +353,12 @@ class ProductsServiceUnitTest {
 
         List<ProductDescriptionRequestDto> asusDescriptions = List.of(ruAsusDescription, enAsusDescription);
 
-        var ruAsusScreenFeature =
-                new ProductFeatureRequestDto(FIRST_FEATURE_ID, RU_LANGUAGE_CODE, RU_SCREEN_FEATURE_NAME,
-                        ASUS_SCREEN_FEATURE_VALUE);
+        var ruAsusScreenFeature = new ProductFeatureRequestDto(FIRST_FEATURE_ID, RU_LANGUAGE_CODE,
+                RU_SCREEN_FEATURE_NAME, ASUS_SCREEN_FEATURE_VALUE);
         var ruAsusCpuFeature = new ProductFeatureRequestDto(SECOND_FEATURE_ID, RU_LANGUAGE_CODE, RU_CPU_FEATURE_NAME,
                 ASUS_CPU_FEATURE_VALUE);
-        var enAsusScreenFeature =
-                new ProductFeatureRequestDto(THIRD_FEATURE_ID, EN_LANGUAGE_CODE, EN_SCREEN_FEATURE_NAME,
-                        ASUS_SCREEN_FEATURE_VALUE);
+        var enAsusScreenFeature = new ProductFeatureRequestDto(THIRD_FEATURE_ID, EN_LANGUAGE_CODE,
+                EN_SCREEN_FEATURE_NAME, ASUS_SCREEN_FEATURE_VALUE);
         var enAsusCpuFeature = new ProductFeatureRequestDto(FOURTH_FEATURE_ID, EN_LANGUAGE_CODE, EN_CPU_FEATURE_NAME,
                 ASUS_CPU_FEATURE_VALUE);
 
