@@ -71,6 +71,7 @@ class ProductsServiceUnitTest {
     private ProductsService productsService;
     private InOrder inOrder;
     private Map<String, Language> languagesByCode;
+    private List<LanguageResponseDto> languagesDto;
 
     @BeforeEach
     void setUp() {
@@ -80,41 +81,29 @@ class ProductsServiceUnitTest {
         this.productsService = new ProductsServiceImpl(productsRepository, featuresRepository, languagesService);
         this.inOrder = inOrder(productsRepository, featuresRepository, languagesService);
         this.languagesByCode = makeLanguagesByCode();
+        this.languagesDto = languagesByCode.values()
+                .stream()
+                .map(language -> new LanguageResponseDto(language.getId(), language.getCode()))
+                .toList();
     }
 
     @ParameterizedTest
     @MethodSource("makeRequestProducts")
     @DisplayName("should create product")
     void shouldCreateProduct(ProductRequestDto requestDto) {
-        List<LanguageResponseDto> expectedLanguages = languagesByCode.values()
-                .stream()
-                .map(language -> new LanguageResponseDto(language.getId(), language.getCode()))
-                .toList();
         var savedProduct = makeProductFromDto(requestDto);
         List<ProductDescription> savedDescriptions = savedProduct.getDescriptions();
         List<ProductFeature> savedFeatures = savedProduct.getFeatures();
         List<ProductDescriptionResponseDto> expectedDescriptions = savedDescriptions.stream()
-                .map(description -> {
-                    var language = description.getLanguage();
-                    var languageDto = new LanguageResponseDto(language.getId(), language.getCode());
-
-                    return new ProductDescriptionResponseDto(description.getId(), languageDto, description.getTitle(),
-                            description.getDescription());
-                })
+                .map(this::convertDescriptionToDto)
                 .toList();
         List<ProductFeatureResponseDto> expectedFeatures = savedFeatures.stream()
-                .map(feature -> {
-                    var language = feature.getLanguage();
-                    var languageDto = new LanguageResponseDto(language.getId(), language.getCode());
-
-                    return new ProductFeatureResponseDto(feature.getId(), languageDto, feature.getName(),
-                            feature.getValue());
-                })
+                .map(this::convertFeatureToDto)
                 .toList();
         var expectedProduct = new ProductResponseDto(FIRST_PRODUCT_ID, requestDto.price(), expectedDescriptions,
                 expectedFeatures);
 
-        when(languagesService.getAllByCodeIn(anyCollection())).thenReturn(expectedLanguages);
+        when(languagesService.getAllByCodeIn(anyCollection())).thenReturn(languagesDto);
         when(productsRepository.save(any())).thenReturn(savedProduct);
 
         assertThat(productsService.create(requestDto))
@@ -150,22 +139,10 @@ class ProductsServiceUnitTest {
         List<ProductDescription> descriptions = foundedProduct.getDescriptions();
         List<ProductFeature> features = foundedProduct.getFeatures();
         List<ProductDescriptionResponseDto> expectedDescriptions = descriptions.stream()
-                .map(description -> {
-                    var language = description.getLanguage();
-                    var languageDto = new LanguageResponseDto(language.getId(), language.getCode());
-
-                    return new ProductDescriptionResponseDto(description.getId(), languageDto, description.getTitle(),
-                            description.getDescription());
-                })
+                .map(this::convertDescriptionToDto)
                 .toList();
         List<ProductFeatureResponseDto> expectedFeatures = features.stream()
-                .map(feature -> {
-                    var language = feature.getLanguage();
-                    var languageDto = new LanguageResponseDto(language.getId(), language.getCode());
-
-                    return new ProductFeatureResponseDto(feature.getId(), languageDto, feature.getName(),
-                            feature.getValue());
-                })
+                .map(this::convertFeatureToDto)
                 .toList();
         var expectedProduct = new ProductResponseDto(foundedProduct.getId(), foundedProduct.getPrice(),
                 expectedDescriptions, expectedFeatures);
@@ -188,17 +165,13 @@ class ProductsServiceUnitTest {
     @ParameterizedTest
     @MethodSource("makeRequestProducts")
     void shouldUpdateProduct(ProductRequestDto requestDto) {
-        List<LanguageResponseDto> expectedLanguages = languagesByCode.values()
-                .stream()
-                .map(language -> new LanguageResponseDto(language.getId(), language.getCode()))
-                .toList();
         var foundedProduct = makeProductById(FIRST_PRODUCT_ID);
         List<ProductFeature> features = foundedProduct.getFeatures();
         var expectedProduct = makeProductFromDto(requestDto);
 
         when(productsRepository.findByIdWithDescriptions(FIRST_PRODUCT_ID)).thenReturn(Optional.of(foundedProduct));
         when(featuresRepository.findAllByProductId(FIRST_PRODUCT_ID)).thenReturn(features.stream());
-        when(languagesService.getAllByCodeIn(anyCollection())).thenReturn(expectedLanguages);
+        when(languagesService.getAllByCodeIn(anyCollection())).thenReturn(languagesDto);
         when(productsRepository.save(any())).thenReturn(expectedProduct);
 
         assertThat(productsService.update(FIRST_PRODUCT_ID, requestDto)).isNotNull()
@@ -249,6 +222,22 @@ class ProductsServiceUnitTest {
     void shouldThrowNotFoundResourceExceptionWhenProductForDeleteNotFound() {
         when(productsRepository.existsById(FIRST_PRODUCT_ID)).thenReturn(false);
         assertThrows(NotFoundResourceException.class, () -> productsService.deleteById(FIRST_PRODUCT_ID));
+    }
+
+    private ProductFeatureResponseDto convertFeatureToDto(ProductFeature feature) {
+        var language = feature.getLanguage();
+        var languageDto = new LanguageResponseDto(language.getId(), language.getCode());
+
+        return new ProductFeatureResponseDto(feature.getId(), languageDto, feature.getName(),
+                feature.getValue());
+    }
+
+    private ProductDescriptionResponseDto convertDescriptionToDto(ProductDescription description) {
+        var language = description.getLanguage();
+        var languageDto = new LanguageResponseDto(language.getId(), language.getCode());
+
+        return new ProductDescriptionResponseDto(description.getId(), languageDto, description.getTitle(),
+                description.getDescription());
     }
 
     private Product makeProductById(long id) {
