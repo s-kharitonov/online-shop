@@ -91,7 +91,6 @@ class ProductsRestControllerUnitTest {
                 Map.entry(RU_LANGUAGE_CODE, new LanguageResponseDto(FIRST_LANGUAGE_ID, RU_LANGUAGE_CODE)),
                 Map.entry(EN_LANGUAGE_CODE, new LanguageResponseDto(SECOND_LANGUAGE_ID, EN_LANGUAGE_CODE))
         );
-        ;
     }
 
     @ParameterizedTest
