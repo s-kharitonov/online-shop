@@ -7,12 +7,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "shop", name = "languages")
+@Table(name = "languages")
 public class Language {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "languages_s")
-    @SequenceGenerator(name = "languages_s", schema = "shop", sequenceName = "languages_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "languages_s", sequenceName = "languages_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "code", nullable = false, length = 3)

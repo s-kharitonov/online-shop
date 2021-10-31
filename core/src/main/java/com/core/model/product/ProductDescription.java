@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "shop", name = "product_descriptions")
+@Table(name = "product_descriptions")
 public class ProductDescription {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_descriptions_s")
-    @SequenceGenerator(name = "product_descriptions_s", schema = "shop", sequenceName = "product_descriptions_id_seq",
+    @SequenceGenerator(name = "product_descriptions_s", sequenceName = "product_descriptions_id_seq",
             allocationSize = 1)
     private Long id;
 
