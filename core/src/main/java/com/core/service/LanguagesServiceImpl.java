@@ -32,21 +32,21 @@ public class LanguagesServiceImpl implements LanguagesService {
 
         var savedLanguage = repository.save(language);
 
-        return convertLanguageToDto(savedLanguage);
+        return new LanguageResponseDto(savedLanguage.getId(), savedLanguage.getCode());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<LanguageResponseDto> getByCode(String code) {
         return repository.findByCode(code)
-                .map(this::convertLanguageToDto);
+                .map(language -> new LanguageResponseDto(language.getId(), language.getCode()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LanguageResponseDto> getAllByCodeIn(Collection<String> codes) {
         return repository.findAllByCodeIn(codes)
-                .map(this::convertLanguageToDto)
+                .map(language -> new LanguageResponseDto(language.getId(), language.getCode()))
                 .toList();
     }
 
@@ -61,7 +61,7 @@ public class LanguagesServiceImpl implements LanguagesService {
 
         var updatedLanguage = repository.save(language);
 
-        return convertLanguageToDto(updatedLanguage);
+        return new LanguageResponseDto(id, updatedLanguage.getCode());
     }
 
     @Override
@@ -80,12 +80,5 @@ public class LanguagesServiceImpl implements LanguagesService {
         if (repository.existsByCode(code)) {
             throw new UniqueConstraintException(String.format("language with code: %s is already exist", code));
         }
-    }
-
-    private LanguageResponseDto convertLanguageToDto(Language language) {
-        return new LanguageResponseDto.Builder()
-                .id(language.getId())
-                .code(language.getCode())
-                .build();
     }
 }

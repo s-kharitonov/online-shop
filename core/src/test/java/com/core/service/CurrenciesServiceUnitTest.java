@@ -57,11 +57,8 @@ class CurrenciesServiceUnitTest {
         when(repository.save(any()))
                 .thenReturn(savedCurrency);
 
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(savedCurrency.getId())
-                .code(savedCurrency.getCode())
-                .multiplier(savedCurrency.getMultiplier())
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(savedCurrency.getId(), savedCurrency.getCode(),
+                savedCurrency.getMultiplier());
 
         assertThat(service.create(requestDto))
                 .isNotNull()
@@ -80,10 +77,7 @@ class CurrenciesServiceUnitTest {
     @Test
     @DisplayName("should throw UniqueConstraintException when currency for save has not unique code")
     void shouldThrowUniqueConstraintExceptionWhenCurrencyForSaveHasNotUniqueCode() {
-        var rub = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var rub = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
 
         when(repository.existsByCode(RUB_CODE)).thenReturn(true);
         assertThrows(UniqueConstraintException.class, () -> service.create(rub));
@@ -103,11 +97,8 @@ class CurrenciesServiceUnitTest {
         when(repository.findByCode(currencyCode))
                 .thenReturn(Optional.of(foundedCurrency));
 
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(foundedCurrency.getId())
-                .code(foundedCurrency.getCode())
-                .multiplier(foundedCurrency.getMultiplier())
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(foundedCurrency.getId(), foundedCurrency.getCode(),
+                foundedCurrency.getMultiplier());
 
         assertThat(service.getByCode(currencyCode))
                 .isNotEmpty()
@@ -137,11 +128,8 @@ class CurrenciesServiceUnitTest {
         when(repository.save(foundedCurrency))
                 .thenReturn(foundedCurrency);
 
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .code(foundedCurrency.getCode())
-                .multiplier(foundedCurrency.getMultiplier())
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, foundedCurrency.getCode(),
+                foundedCurrency.getMultiplier());
 
         assertThat(service.update(FIRST_CURRENCY_ID, requestDto))
                 .isNotNull()
@@ -156,13 +144,9 @@ class CurrenciesServiceUnitTest {
     @Test
     @DisplayName("should throw NotFoundResourceException when currency for update not found")
     void shouldThrowNotFoundResourceExceptionWhenCurrencyForUpdateNotFound() {
-        var currencyForUpdate = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var currencyForUpdate = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
 
         when(repository.findById(FIRST_CURRENCY_ID)).thenReturn(Optional.empty());
-
         assertThrows(NotFoundResourceException.class, () -> service.update(FIRST_CURRENCY_ID, currencyForUpdate));
     }
 
@@ -170,10 +154,7 @@ class CurrenciesServiceUnitTest {
     @Test
     @DisplayName("should throw UniqueConstraintException when currency for update has not unique code")
     void shouldThrowUniqueConstraintExceptionWhenCurrencyForUpdateHasNotUniqueCode() {
-        var rub = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var rub = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
 
         when(repository.existsByCode(RUB_CODE)).thenReturn(true);
         assertThrows(UniqueConstraintException.class, () -> service.update(FIRST_CURRENCY_ID, rub));
@@ -215,18 +196,9 @@ class CurrenciesServiceUnitTest {
     }
 
     private static Stream<CurrencyRequestDto> makeRequestCurrencies() {
-        var rub = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
-        var usd = new CurrencyRequestDto.Builder()
-                .code(USD_CODE)
-                .multiplier(BigDecimal.valueOf(75))
-                .build();
-        var gbp = new CurrencyRequestDto.Builder()
-                .code(GBP_CODE)
-                .multiplier(BigDecimal.valueOf(100))
-                .build();
+        var rub = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
+        var usd = new CurrencyRequestDto(USD_CODE, BigDecimal.valueOf(75));
+        var gbp = new CurrencyRequestDto(GBP_CODE, BigDecimal.valueOf(100));
 
         return Stream.of(rub, usd, gbp);
     }

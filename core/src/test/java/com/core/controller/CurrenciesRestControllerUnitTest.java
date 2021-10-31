@@ -62,15 +62,8 @@ class CurrenciesRestControllerUnitTest {
     @Test
     @DisplayName("should create currency")
     void shouldCreateCurrency() throws Exception {
-        var currency = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .multiplier(BigDecimal.ONE)
-                .code(RUB_CODE)
-                .build();
+        var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, RUB_CODE, BigDecimal.ONE);
         var requestBuilder = post(CURRENCY_DOMAIN_URL)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));
@@ -111,10 +104,7 @@ class CurrenciesRestControllerUnitTest {
     @Test
     @DisplayName("should response CONFLICT when currency for save has not unique code")
     void shouldResponseConflictWhenCurrencyForSaveHasNotUniqueCode() throws Exception {
-        var currency = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
         var requestBuilder = post(CURRENCY_DOMAIN_URL)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));
@@ -137,11 +127,7 @@ class CurrenciesRestControllerUnitTest {
     @ValueSource(strings = {RUB_CODE, USD_CODE, GBP_CODE})
     @DisplayName("should return currency by code")
     void shouldReturnCurrencyByCode(String code) throws Exception {
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .code(code)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, code, BigDecimal.ONE);
         var requestBuilder = get(CURRENCY_BY_CODE_URL, code);
 
         when(currenciesService.getByCode(code)).thenReturn(Optional.of(expectedCurrency));
@@ -195,15 +181,8 @@ class CurrenciesRestControllerUnitTest {
     @Test
     @DisplayName("should update currency")
     void shouldUpdateCurrency() throws Exception {
-        var currency = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .multiplier(BigDecimal.ONE)
-                .code(RUB_CODE)
-                .build();
+        var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, RUB_CODE, BigDecimal.ONE);
         var requestBuilder = put(CURRENCY_BY_ID_URL, FIRST_CURRENCY_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));
@@ -222,10 +201,7 @@ class CurrenciesRestControllerUnitTest {
     @Test
     @DisplayName("should response CONFLICT when currency for update has not unique code")
     void shouldResponseConflictWhenCurrencyForUpdateHasNotUniqueCode() throws Exception {
-        var currency = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
         var requestBuilder = put(CURRENCY_BY_ID_URL, FIRST_CURRENCY_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));
@@ -249,10 +225,7 @@ class CurrenciesRestControllerUnitTest {
     @ValueSource(longs = {0, Long.MIN_VALUE, -1})
     @DisplayName("should response BAD_REQUEST when currency id for update is negative or zero")
     void shouldResponseBadRequestWhenCurrencyIdForUpdateIsNegativeOrZero(long id) throws Exception {
-        var currency = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
         var requestBuilder = put(CURRENCY_BY_ID_URL, id)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));
@@ -342,26 +315,11 @@ class CurrenciesRestControllerUnitTest {
 
 
     private static Stream<CurrencyRequestDto> makeNotValidCurrencies() {
-        var currencyWithNullCode = new CurrencyRequestDto.Builder()
-                .code(null)
-                .multiplier(BigDecimal.ONE)
-                .build();
-        var currencyWithEmptyCode = new CurrencyRequestDto.Builder()
-                .code("")
-                .multiplier(BigDecimal.ONE)
-                .build();
-        var currencyWithBlankCode = new CurrencyRequestDto.Builder()
-                .code(" " + RUB_CODE + " ")
-                .multiplier(BigDecimal.ONE)
-                .build();
-        var currencyWithNegativeMultiplier = new CurrencyRequestDto.Builder()
-                .code(RUB_CODE)
-                .multiplier(BigDecimal.valueOf(-1))
-                .build();
-        var both = new CurrencyRequestDto.Builder()
-                .code(null)
-                .multiplier(BigDecimal.valueOf(-1))
-                .build();
+        var currencyWithNullCode = new CurrencyRequestDto(null, BigDecimal.ONE);
+        var currencyWithEmptyCode = new CurrencyRequestDto("", BigDecimal.ONE);
+        var currencyWithBlankCode = new CurrencyRequestDto(" " + RUB_CODE + " ", BigDecimal.ONE);
+        var currencyWithNegativeMultiplier = new CurrencyRequestDto(RUB_CODE, BigDecimal.valueOf(-1));
+        var both = new CurrencyRequestDto(null, BigDecimal.valueOf(-1));
 
         return Stream.of(currencyWithNullCode, currencyWithEmptyCode, currencyWithBlankCode,
                 currencyWithNegativeMultiplier, both);

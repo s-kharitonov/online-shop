@@ -61,13 +61,8 @@ class LanguagesRestControllerUnitTest {
     @Test
     @DisplayName("should create language")
     void shouldCreateLanguage() throws Exception {
-        var language = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(RU_CODE)
-                .build();
+        var language = new LanguageRequestDto(RU_CODE);
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, RU_CODE);
         var requestBuilder = post(LANGUAGE_DOMAIN_URL)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));
@@ -107,9 +102,7 @@ class LanguagesRestControllerUnitTest {
     @Test
     @DisplayName("should response CONFLICT when language for save has not unique code")
     void shouldResponseConflictWhenLanguageForSaveHasNotUniqueCode() throws Exception {
-        var language = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
+        var language = new LanguageRequestDto(RU_CODE);
         var requestBuilder = post(LANGUAGE_DOMAIN_URL)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));
@@ -132,10 +125,7 @@ class LanguagesRestControllerUnitTest {
     @ValueSource(strings = {RU_CODE, EN_CODE, DE_CODE})
     @DisplayName("should return language by code")
     void shouldReturnLanguageByCode(String code) throws Exception {
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(code)
-                .build();
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, code);
         var requestBuilder = get(LANGUAGE_BY_CODE_URL, code);
 
         when(languagesService.getByCode(code)).thenReturn(Optional.of(expectedLanguage));
@@ -187,13 +177,8 @@ class LanguagesRestControllerUnitTest {
     @Test
     @DisplayName("should update language")
     void shouldUpdateLanguage() throws Exception {
-        var language = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(RU_CODE)
-                .build();
+        var language = new LanguageRequestDto(RU_CODE);
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, RU_CODE);
         var requestBuilder = put(LANGUAGE_BY_ID_URL, FIRST_LANGUAGE_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));
@@ -210,9 +195,7 @@ class LanguagesRestControllerUnitTest {
     @Test
     @DisplayName("should response CONFLICT when language for update has not unique code")
     void shouldResponseConflictWhenLanguageForUpdateHasNotUniqueCode() throws Exception {
-        var language = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
+        var language = new LanguageRequestDto(RU_CODE);
         var requestBuilder = put(LANGUAGE_BY_ID_URL, FIRST_LANGUAGE_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));
@@ -235,9 +218,7 @@ class LanguagesRestControllerUnitTest {
     @ValueSource(longs = {0, Long.MIN_VALUE, -1})
     @DisplayName("should response BAD_REQUEST when language id for update is negative or zero")
     void shouldResponseBadRequestWhenLanguageIdForUpdateIsNegativeOrZero(long id) throws Exception {
-        var language = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
+        var language = new LanguageRequestDto(RU_CODE);
         var requestBuilder = put(LANGUAGE_BY_ID_URL, id)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));
@@ -324,18 +305,10 @@ class LanguagesRestControllerUnitTest {
     }
 
     private static Stream<LanguageRequestDto> makeNotValidLanguages() {
-        var languageWithNullCode = new LanguageRequestDto.Builder()
-                .code(null)
-                .build();
-        var languageWithEmptyCode = new LanguageRequestDto.Builder()
-                .code("")
-                .build();
-        var languageWithBlankCode = new LanguageRequestDto.Builder()
-                .code(" " + RU_CODE + " ")
-                .build();
-        var languageWithNotValidLengthCode = new LanguageRequestDto.Builder()
-                .code(RU_CODE + DE_CODE + EN_CODE)
-                .build();
+        var languageWithNullCode = new LanguageRequestDto(null);
+        var languageWithEmptyCode = new LanguageRequestDto("");
+        var languageWithBlankCode = new LanguageRequestDto(" " + RU_CODE + " ");
+        var languageWithNotValidLengthCode = new LanguageRequestDto(RU_CODE + DE_CODE + EN_CODE);
 
         return Stream.of(languageWithNullCode, languageWithEmptyCode, languageWithBlankCode,
                 languageWithNotValidLengthCode);

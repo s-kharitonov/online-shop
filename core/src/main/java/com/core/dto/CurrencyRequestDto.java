@@ -9,27 +9,4 @@ import java.math.BigDecimal;
 
 public record CurrencyRequestDto(@NotBlank @Length(min = 3, max = 3) String code,
                                  @NotNull @Min(value = 0) BigDecimal multiplier) {
-
-    private CurrencyRequestDto(Builder builder) {
-        this(builder.code, builder.multiplier);
-    }
-
-    public static class Builder {
-        private String code;
-        private BigDecimal multiplier;
-
-        public Builder code(String code) {
-            this.code = code;
-            return this;
-        }
-
-        public Builder multiplier(BigDecimal multiplier) {
-            this.multiplier = multiplier;
-            return this;
-        }
-
-        public CurrencyRequestDto build() {
-            return new CurrencyRequestDto(this);
-        }
-    }
 }
