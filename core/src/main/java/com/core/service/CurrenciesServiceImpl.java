@@ -75,10 +75,10 @@ public class CurrenciesServiceImpl implements CurrenciesService {
     }
 
     private CurrencyResponseDto convertCurrencyToDto(Currency currency) {
-        return new CurrencyResponseDto.Builder()
-                .id(currency.getId())
-                .code(currency.getCode())
-                .multiplier(currency.getMultiplier())
-                .build();
+        var id = currency.getId();
+        var code = currency.getCode();
+        var multiplier = currency.getMultiplier();
+
+        return new CurrencyResponseDto(id, code, multiplier);
     }
 }

@@ -63,11 +63,7 @@ class CurrenciesRestControllerUnitTest {
     @DisplayName("should create currency")
     void shouldCreateCurrency() throws Exception {
         var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .multiplier(BigDecimal.ONE)
-                .code(RUB_CODE)
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, RUB_CODE, BigDecimal.ONE);
         var requestBuilder = post(CURRENCY_DOMAIN_URL)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));
@@ -131,11 +127,7 @@ class CurrenciesRestControllerUnitTest {
     @ValueSource(strings = {RUB_CODE, USD_CODE, GBP_CODE})
     @DisplayName("should return currency by code")
     void shouldReturnCurrencyByCode(String code) throws Exception {
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .code(code)
-                .multiplier(BigDecimal.ONE)
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, code, BigDecimal.ONE);
         var requestBuilder = get(CURRENCY_BY_CODE_URL, code);
 
         when(currenciesService.getByCode(code)).thenReturn(Optional.of(expectedCurrency));
@@ -190,11 +182,7 @@ class CurrenciesRestControllerUnitTest {
     @DisplayName("should update currency")
     void shouldUpdateCurrency() throws Exception {
         var currency = new CurrencyRequestDto(RUB_CODE, BigDecimal.ONE);
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .multiplier(BigDecimal.ONE)
-                .code(RUB_CODE)
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, RUB_CODE, BigDecimal.ONE);
         var requestBuilder = put(CURRENCY_BY_ID_URL, FIRST_CURRENCY_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(currency));

@@ -57,11 +57,8 @@ class CurrenciesServiceUnitTest {
         when(repository.save(any()))
                 .thenReturn(savedCurrency);
 
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(savedCurrency.getId())
-                .code(savedCurrency.getCode())
-                .multiplier(savedCurrency.getMultiplier())
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(savedCurrency.getId(), savedCurrency.getCode(),
+                savedCurrency.getMultiplier());
 
         assertThat(service.create(requestDto))
                 .isNotNull()
@@ -100,11 +97,8 @@ class CurrenciesServiceUnitTest {
         when(repository.findByCode(currencyCode))
                 .thenReturn(Optional.of(foundedCurrency));
 
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(foundedCurrency.getId())
-                .code(foundedCurrency.getCode())
-                .multiplier(foundedCurrency.getMultiplier())
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(foundedCurrency.getId(), foundedCurrency.getCode(),
+                foundedCurrency.getMultiplier());
 
         assertThat(service.getByCode(currencyCode))
                 .isNotEmpty()
@@ -134,11 +128,8 @@ class CurrenciesServiceUnitTest {
         when(repository.save(foundedCurrency))
                 .thenReturn(foundedCurrency);
 
-        var expectedCurrency = new CurrencyResponseDto.Builder()
-                .id(FIRST_CURRENCY_ID)
-                .code(foundedCurrency.getCode())
-                .multiplier(foundedCurrency.getMultiplier())
-                .build();
+        var expectedCurrency = new CurrencyResponseDto(FIRST_CURRENCY_ID, foundedCurrency.getCode(),
+                foundedCurrency.getMultiplier());
 
         assertThat(service.update(FIRST_CURRENCY_ID, requestDto))
                 .isNotNull()
