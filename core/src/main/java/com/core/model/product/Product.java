@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(schema = "shop", name = "products")
+@Table(name = "products")
 public class Product {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_s")
-    @SequenceGenerator(name = "products_s", schema = "shop", sequenceName = "products_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "products_s", sequenceName = "products_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "price", nullable = false)

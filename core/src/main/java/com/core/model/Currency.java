@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "shop", name = "currencies")
+@Table(name = "currencies")
 public class Currency {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencies_s")
-    @SequenceGenerator(name = "currencies_s", schema = "shop", sequenceName = "currencies_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "currencies_s", sequenceName = "currencies_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 3)
