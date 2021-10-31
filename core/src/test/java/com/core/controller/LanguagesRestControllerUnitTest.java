@@ -62,10 +62,7 @@ class LanguagesRestControllerUnitTest {
     @DisplayName("should create language")
     void shouldCreateLanguage() throws Exception {
         var language = new LanguageRequestDto(RU_CODE);
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(RU_CODE)
-                .build();
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, RU_CODE);
         var requestBuilder = post(LANGUAGE_DOMAIN_URL)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));
@@ -128,10 +125,7 @@ class LanguagesRestControllerUnitTest {
     @ValueSource(strings = {RU_CODE, EN_CODE, DE_CODE})
     @DisplayName("should return language by code")
     void shouldReturnLanguageByCode(String code) throws Exception {
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(code)
-                .build();
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, code);
         var requestBuilder = get(LANGUAGE_BY_CODE_URL, code);
 
         when(languagesService.getByCode(code)).thenReturn(Optional.of(expectedLanguage));
@@ -184,10 +178,7 @@ class LanguagesRestControllerUnitTest {
     @DisplayName("should update language")
     void shouldUpdateLanguage() throws Exception {
         var language = new LanguageRequestDto(RU_CODE);
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(RU_CODE)
-                .build();
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, RU_CODE);
         var requestBuilder = put(LANGUAGE_BY_ID_URL, FIRST_LANGUAGE_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(language));

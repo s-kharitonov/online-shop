@@ -55,10 +55,7 @@ class LanguagesServiceUnitTest {
 
         when(repository.save(any())).thenReturn(savedLanguage);
 
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(FIRST_LANGUAGE_ID)
-                .code(requestDto.code())
-                .build();
+        var expectedLanguage = new LanguageResponseDto(FIRST_LANGUAGE_ID, requestDto.code());
 
         assertThat(service.create(requestDto))
                 .isNotNull()
@@ -97,10 +94,7 @@ class LanguagesServiceUnitTest {
 
         when(repository.findByCode(code)).thenReturn(Optional.of(foundedLanguage));
 
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(foundedLanguage.getId())
-                .code(foundedLanguage.getCode())
-                .build();
+        var expectedLanguage = new LanguageResponseDto(foundedLanguage.getId(), foundedLanguage.getCode());
 
         assertThat(service.getByCode(code))
                 .isNotEmpty()
@@ -154,10 +148,7 @@ class LanguagesServiceUnitTest {
 
         when(repository.save(foundedLanguage)).thenReturn(foundedLanguage);
 
-        var expectedLanguage = new LanguageResponseDto.Builder()
-                .id(foundedLanguage.getId())
-                .code(foundedLanguage.getCode())
-                .build();
+        var expectedLanguage = new LanguageResponseDto(foundedLanguage.getId(), foundedLanguage.getCode());
 
         assertThat(service.update(FIRST_LANGUAGE_ID, requestDto))
                 .isNotNull()
