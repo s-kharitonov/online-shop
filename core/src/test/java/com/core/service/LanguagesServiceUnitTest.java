@@ -79,9 +79,7 @@ class LanguagesServiceUnitTest {
     @Test
     @DisplayName("should throw UniqueConstraintException when language for create has not unique code")
     void shouldThrowUniqueConstraintExceptionWhenLanguageForCreateHasNotUniqueCode() {
-        var ru = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
+        var ru = new LanguageRequestDto(RU_CODE);
 
         when(repository.existsByCode(ru.code())).thenReturn(true);
         assertThrows(UniqueConstraintException.class, () -> service.create(ru));
@@ -176,9 +174,7 @@ class LanguagesServiceUnitTest {
     @Test
     @DisplayName("should throw NotFoundResourceException when language for update not found")
     void shouldThrowNotFoundResourceExceptionWhenLanguageForUpdateNotFound() {
-        var languageForUpdate = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
+        var languageForUpdate = new LanguageRequestDto(RU_CODE);
 
         when(repository.findById(FIRST_LANGUAGE_ID)).thenReturn(Optional.empty());
         assertThrows(NotFoundResourceException.class, () -> service.update(FIRST_LANGUAGE_ID, languageForUpdate));
@@ -187,9 +183,8 @@ class LanguagesServiceUnitTest {
     @Test
     @DisplayName("should throw UniqueConstraintException when language for update has not unique code")
     void shouldThrowUniqueConstraintExceptionWhenLanguageForUpdateHasNotUniqueCode() {
-        var ru = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
+        var ru = new LanguageRequestDto(RU_CODE);
+
         when(repository.existsByCode(RU_CODE)).thenReturn(true);
         assertThrows(UniqueConstraintException.class, () -> service.update(FIRST_LANGUAGE_ID, ru));
     }
@@ -226,15 +221,9 @@ class LanguagesServiceUnitTest {
     }
 
     private static Stream<LanguageRequestDto> makeRequestLanguages() {
-        var ru = new LanguageRequestDto.Builder()
-                .code(RU_CODE)
-                .build();
-        var en = new LanguageRequestDto.Builder()
-                .code(EN_CODE)
-                .build();
-        var de = new LanguageRequestDto.Builder()
-                .code(DE_CODE)
-                .build();
+        var ru = new LanguageRequestDto(RU_CODE);
+        var en = new LanguageRequestDto(EN_CODE);
+        var de = new LanguageRequestDto(DE_CODE);
 
         return Stream.of(ru, en, de);
     }
