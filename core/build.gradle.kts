@@ -36,7 +36,7 @@ tasks.getByName<BootJar>("bootJar") {
     archiveVersion.set("0.1.0")
 }
 
-tasks.test {
+tasks.getByName<Test>("test") {
     useJUnitPlatform()
 
     testLogging {
