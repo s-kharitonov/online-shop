@@ -1,8 +1,8 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
@@ -36,7 +36,7 @@ tasks.getByName<BootJar>("bootJar") {
     archiveVersion.set("0.1.0")
 }
 
-tasks.test {
+tasks.getByName<Test>("test") {
     useJUnitPlatform()
 
     testLogging {
