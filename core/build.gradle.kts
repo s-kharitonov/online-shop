@@ -5,6 +5,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+plugins {
+    id("org.springdoc.openapi-gradle-plugin") apply(true)
+    id("com.github.johnrengelman.processes") apply(true)
+}
+
 dependencies {
     implementation("org.postgresql:postgresql")
     implementation("org.liquibase:liquibase-core")
@@ -18,10 +23,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation(libs.springfox.boot.starter)
-    implementation(libs.springfox.bean.validators)
-    implementation(libs.springfox.data.rest)
-    implementation(libs.springfox.swagger.ui)
+    implementation(libs.springdoc.openapi)
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -33,7 +35,7 @@ dependencies {
 tasks.getByName<BootJar>("bootJar") {
     mainClass.set("com.core.CoreApp")
     archiveBaseName.set("core")
-    archiveVersion.set("0.1.0")
+    archiveVersion.set("0.3.0")
 }
 
 tasks.getByName<Test>("test") {

@@ -1,6 +1,8 @@
 plugins {
     id("org.springframework.boot") apply(false)
     id("io.spring.dependency-management") apply(false)
+    id("org.springdoc.openapi-gradle-plugin") apply(false)
+    id("com.github.johnrengelman.processes") apply(false)
 }
 
 subprojects {
