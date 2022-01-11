@@ -35,7 +35,7 @@ dependencies {
 tasks.getByName<BootJar>("bootJar") {
     mainClass.set("com.core.CoreApp")
     archiveBaseName.set("core")
-    archiveVersion.set("0.1.0")
+    archiveVersion.set("0.3.0")
 }
 
 tasks.getByName<Test>("test") {

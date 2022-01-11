@@ -12,7 +12,7 @@ public class OpenApiConfig {
     public OpenAPI coreApi() {
         var info = new Info()
                 .title("Online shop")
-                .version("v0.2.0");
+                .version("v0.3.0");
 
         return new OpenAPI()
                 .info(info);
