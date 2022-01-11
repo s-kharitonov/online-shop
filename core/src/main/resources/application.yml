@@ -29,3 +29,5 @@ server:
   port: ${SERVER_PORT}
   servlet:
     context-path: /core
+springdoc:
+  packages-to-scan: com.core.controller
